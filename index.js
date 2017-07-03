@@ -37,13 +37,19 @@ class Bot extends EventEmitter {
     })
   }
 
-  sendMessage (recipient, payload, cb) {
+  sendMessage (recipientParam, payload, cb) {
+    let recipient = recipientParam
+
+    if (typeof recipient === 'string') {
+      recipient = { id: recipient }
+    }
+
     return request({
       method: 'POST',
       uri: 'https://graph.facebook.com/v2.6/me/messages',
       qs: this._getQs(),
       json: {
-        recipient: { id: recipient },
+        recipient: recipient,
         message: payload
       }
     })
